@@ -7,18 +7,25 @@
  */
 
 //get data
-$user = $_REQUEST['user'];
-$message = $_REQUEST['message'];
+$user = strip_tags($_REQUEST['user']);
+$message = strip_tags($_REQUEST['message']);
 $time = time();
 
 //verify data
+if (!empty($user) && !empty($message) && strlen($user) < 20) {
 
+    //insert data
+    $db = new PDO('sqlite:db/chatdb.db');
+    $qry = $db->prepare('INSERT INTO chat (user, message, time) VALUES (?, ?, ?)');
 
-//insert data
-$db = new PDO('sqlite:db/chatdb.db');
-$qry = $db->prepare(
-    'INSERT INTO chat (user, message, time) VALUES (?, ?, ?)');
-echo $qry->execute(array($user, $message, $time));
+    //insert into db and return success
+    echo $qry->execute(array($user, $message, $time));
 
-//to do: establish http connection to ensure 1 user per username
+    //to do: establish http connection to ensure 1 user per username
+
+}
+else {
+    echo 0;
+}
+
 ?>
