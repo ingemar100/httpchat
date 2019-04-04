@@ -18,8 +18,7 @@ $time = time();
 $db = new PDO('sqlite:db/chatdb.db');
 $qry = $db->prepare(
     'INSERT INTO chat (user, message, time) VALUES (?, ?, ?)');
-$qry->execute(array($user, $message, $time));
+echo $qry->execute(array($user, $message, $time));
 
-echo $time;
 //to do: establish http connection to ensure 1 user per username
 ?>

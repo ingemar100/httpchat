@@ -12,7 +12,5 @@ $statement = $db->query("SELECT * FROM chat ORDER BY time");
 $statement->execute();
 
 //prepare json
-//print_r($statement->fetchAll());
-
-echo json_encode($statement->fetchAll());
 //return json
+echo json_encode($statement->fetchAll(PDO::FETCH_ASSOC));
