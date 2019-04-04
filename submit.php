@@ -12,20 +12,22 @@ $message = strip_tags($_REQUEST['message']);
 $time = time();
 
 //verify data
-if (!empty($user) && !empty($message) && strlen($user) < 20) {
+if (!empty($user) && !empty($message) && strlen($user) < 20 && strlen($message) < 500) {
 
     //insert data
     $db = new PDO('sqlite:db/chatdb.db');
     $qry = $db->prepare('INSERT INTO chat (user, message, time) VALUES (?, ?, ?)');
 
     //insert into db and return success
-    echo $qry->execute(array($user, $message, $time));
-
-    //to do: establish http connection to ensure 1 user per username
-
+    if (!$qry->execute(array($user, $message, $time))){
+        http_response_code(400);
+        exit("Database error");
+    }
 }
 else {
-    echo 0;
+    //400 Bad Request
+    http_response_code(400);
+    exit("Check your parameters");
 }
 
 ?>
