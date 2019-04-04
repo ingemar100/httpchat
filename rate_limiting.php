@@ -17,7 +17,7 @@ if (sizeof($res) > 0){
     if ($time - $res[0]["last_time"] < 1){
         //deny
         http_response_code(429);
-        exit("You cannot make more than 1 request per second");
+        exit(json_encode("You cannot make more than 1 request per second"));
     }
     else {
         //update lass access
@@ -29,5 +29,4 @@ else {
     //insert last access
     $qry = $db->prepare('INSERT INTO requests (ip, last_time) VALUES (?, ?)');
     $qry->execute(array($ip, $time));
-    echo "new ip";
 }

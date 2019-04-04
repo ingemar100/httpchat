@@ -23,14 +23,14 @@ if (!empty($user) && !empty($message) && strlen($user) < 20 && strlen($message) 
     //insert into db and return success
     if (!$qry->execute(array($user, $message, $time))){
         http_response_code(400);
-        exit("Database error");
+        exit(json_encode("Database error"));
     }
     else {
-        echo "Success";
+        echo json_encode("Success");
     }
 }
 else {
     //400 Bad Request
     http_response_code(400);
-    exit("Check your parameters");
+    exit(json_encode("Check your parameters"));
 }
