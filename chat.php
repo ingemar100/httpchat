@@ -9,11 +9,19 @@
 require_once("api.php");
 require_once("rate_limiting.php");
 
-//query
-$db = new PDO('sqlite:db/chatdb.db');
-$statement = $db->query("SELECT * FROM chat ORDER BY time");
-$statement->execute();
+if(!empty($_REQUEST['user'])) {
+    $user = strip_tags($_REQUEST['user']);
 
-//prepare json
-//return json
-echo json_encode($statement->fetchAll(PDO::FETCH_ASSOC));
+    //query
+    $statement = $db->prepare("SELECT sender, message, time FROM chat WHERE receiver = ? ORDER BY time");
+    $statement->execute(array($user));
+
+    //prepare json
+    //return json
+    echo json_encode($statement->fetchAll(PDO::FETCH_ASSOC));
+}
+else {
+    //400 bad request
+    http_response_code(400);
+    exit(json_encode("User parameter missing"));
+}
